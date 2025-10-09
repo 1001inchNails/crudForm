@@ -5,6 +5,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,8 +31,16 @@ class MainActivity : AppCompatActivity() {
             val HP = textHP.text.toString()
 
             if (nombre.isBlank() || clase.isBlank() || HP.isBlank()) {
-                Toast.makeText(this, "Rellena todos los campos menos Indice", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Rellena todos los campos menos Indice", Toast.LENGTH_SHORT)
+                    .show()
             } else {
+                val fichaCreate = FichaCreate(
+                    nombre = nombre,
+                    clase = clase,
+                    HP = HP
+                )
+
+                crearFicha(fichaCreate)
                 // todo: mandar a back, seguir si hay respuesta correcta
                 Toast.makeText(
                     this,
@@ -39,6 +50,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+
+
         btnVer.setOnClickListener {
             val indice = textNombre.text.toString()
             val nombre = textNombre.text.toString()
@@ -46,7 +59,25 @@ class MainActivity : AppCompatActivity() {
             val HP = textHP.text.toString()
             if (indice.isBlank() && nombre.isBlank() && clase.isBlank() && HP.isBlank()) {
                 Toast.makeText(this, "Rellene un campo", Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
+                val filtroKey: String;
+                val filtroValue: String;
+                if (indice.isNotBlank()) {
+                    filtroKey = "indice";
+                    filtroValue = indice;
+                } else if (nombre.isNotBlank()) {
+                    filtroKey = "nombre";
+                    filtroValue = nombre;
+                } else if (clase.isNotBlank()) {
+                    filtroKey = "clase";
+                    filtroValue = clase;
+                } else if (HP.isNotBlank()) {
+                    filtroKey = "HP";
+                    filtroValue = HP;
+                }
+
+                // todo: enviar filtroKey y filtroValue en body
+
                 // todo: hacer la llamada a backend, con todos los valores, manejarlos en el back (separar "blank" del que lleve datos)
                 // todo: cojer los valores del back que encuentre con lo que haya escrito el user en alguno de los inputs
                 val indiceEncontrado: Int;
@@ -61,13 +92,14 @@ class MainActivity : AppCompatActivity() {
 
         btnCambiar.setOnClickListener {
             val indice = textNombre.text.toString()
-            if (indice.isBlank()){
+            if (indice.isBlank()) {
                 Toast.makeText(this, "Introduzca Indice para modificar", Toast.LENGTH_SHORT).show()
-            }else {
+            } else {
                 // todo: enviar a backend y cambiar en la entrada con el indice correspondiente
-                val indice = textNombre.text.toString()
+                val indice = textIndice.text.toString()
                 val nombre = textNombre.text.toString()
                 val clase = textClase.text.toString()
+                val hp = textHP.text.toString()
                 // todo: verificar operacion desde back
                 Toast.makeText(this, "Ficha modificada", Toast.LENGTH_SHORT).show()
 
@@ -76,14 +108,31 @@ class MainActivity : AppCompatActivity() {
 
         btnBorrar.setOnClickListener {
             val indice = textNombre.text.toString()
-            if (indice.isBlank()){
+            if (indice.isBlank()) {
                 Toast.makeText(this, "Introduzca Indice para borrar", Toast.LENGTH_SHORT).show()
-            }else {
+            } else {
                 // todo: enviar a backend y borrar entrada con el indice correspondiente
                 // todo: verificar operacion desde back
                 Toast.makeText(this, "Ficha borrada", Toast.LENGTH_SHORT).show()
 
             }
         }
+    }
+
+    private fun crearFicha(fichaCreate: FichaCreate) {
+        RetrofitClient.instance.crearFicha(fichaCreate).enqueue(object : Callback<FichaCreate> {
+            override fun onResponse(call: Call<Response>, response: Response<Response>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@MainActivity, "Nueva ficha creada", Toast.LENGTH_LONG).show()
+                    limpiarCampos()
+                } else {
+                    Toast.makeText(this@MainActivity, "Error al crear ficha", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Personaje>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
