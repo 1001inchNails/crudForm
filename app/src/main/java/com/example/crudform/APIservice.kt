@@ -5,15 +5,14 @@ import retrofit2.http.*
 
 interface ApiService {
     @POST("create")
-    fun crearFicha(@Body data: FichaCreate): Call<Response>
+    fun crearFicha(@Body data: FichaCreate): Call<Respuesta>
 
     @POST("read")
-    fun crearFicha(@Body data: FichaRead): Call<Response>
+    fun leerFicha(@Body data: FichaRead): Call<Respuesta>
 
     @POST("update")
-    fun crearFicha(@Body data: FichaUpdate): Call<Response>
+    fun actualizarFicha(@Body data: FichaUpdate): Call<Respuesta>
 
     @POST("delete")
-    fun crearFicha(@Body data: FichaDelete): Call<Response>
-
+    fun borrarFicha(@Body data: FichaDelete): Call<Respuesta>
 }

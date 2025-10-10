@@ -24,7 +24,7 @@ data class FichaDelete(
     val indice: String
 )
 
-data class Response(
+data class Respuesta(
     val type: String,
     val message: String,
     val data: JsonObject? = null,
