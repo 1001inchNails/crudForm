@@ -117,8 +117,6 @@ class MainActivity : AppCompatActivity() {
                 )
                 cambiarFicha (fichaUpdate)
 
-                Toast.makeText(this, "Ficha modificada", Toast.LENGTH_SHORT).show()
-
             }
         }
 
@@ -143,6 +141,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this@MainActivity, "Nueva ficha creada", Toast.LENGTH_LONG).show()
                     limpiarCampos()
                 } else {
+                    limpiarCampos()
                     Toast.makeText(this@MainActivity, "Error al crear ficha", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -160,17 +159,24 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     //Toast.makeText(this@MainActivity, "Nueva ficha creada", Toast.LENGTH_LONG).show()
                     val respuesta = response.body()?.data
-                        //System.out.println(respuesta)
-                    val indiceEncontrado: Int = respuesta.indice;
-                    val nombreEncontrado: String = respuesta.nombre;
-                    val claseEncontrada: String = respuesta.clase;
-                    val hpEncontrado: Int = respuesta.HP;
-                    textIndice.setText(indiceEncontrado.toString())
-                    textNombre.setText(nombreEncontrado)
-                    textClase.setText(claseEncontrada)
-                    textHP.setText(hpEncontrado.toString())
+                        System.out.println(respuesta)
+                    if(respuesta == null){
+                        limpiarCampos()
+                        Toast.makeText(this@MainActivity, "Ficha no encontrada", Toast.LENGTH_SHORT).show()
+                    }else{
+                        val indiceEncontrado: Int = respuesta.indice;
+                        val nombreEncontrado: String = respuesta.nombre;
+                        val claseEncontrada: String = respuesta.clase;
+                        val hpEncontrado: Int = respuesta.HP;
+                        textIndice.setText(indiceEncontrado.toString())
+                        textNombre.setText(nombreEncontrado)
+                        textClase.setText(claseEncontrada)
+                        textHP.setText(hpEncontrado.toString())
+                    }
+
                 } else {
-                    Toast.makeText(this@MainActivity, "Error al leer ficha", Toast.LENGTH_SHORT).show()
+                    limpiarCampos()
+                    Toast.makeText(this@MainActivity, "Ficha no encontrada", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -187,12 +193,18 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
 
                     val respuesta = response.body()
-                    //System.out.println(respuesta)
-                    limpiarCampos()
+                    System.out.println(respuesta)
+                    if(respuesta?.type == "failure"){
+                        limpiarCampos()
+                        Toast.makeText(this@MainActivity, "Ficha no encontrada", Toast.LENGTH_SHORT).show()
+                    }else{
+                        limpiarCampos()
+                        Toast.makeText(this@MainActivity, "Ficha cambiada", Toast.LENGTH_LONG).show()
+                    }
 
-                    Toast.makeText(this@MainActivity, "Ficha cambiada", Toast.LENGTH_LONG).show()
                 } else {
-                    Toast.makeText(this@MainActivity, "Error al leer ficha", Toast.LENGTH_SHORT).show()
+                    limpiarCampos()
+                    Toast.makeText(this@MainActivity, "Ficha no encontrada", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -209,11 +221,17 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val respuesta = response.body()
                     //System.out.println(respuesta)
-                    limpiarCampos()
+                    if(respuesta?.type == "failure"){
+                        limpiarCampos()
+                        Toast.makeText(this@MainActivity, "Ficha no encontrada", Toast.LENGTH_SHORT).show()
+                    }else{
+                        limpiarCampos()
+                        Toast.makeText(this@MainActivity, "Ficha borrada", Toast.LENGTH_LONG).show()
+                    }
 
-                    Toast.makeText(this@MainActivity, "Ficha borrada", Toast.LENGTH_LONG).show()
                 } else {
-                    Toast.makeText(this@MainActivity, "Error al leer ficha", Toast.LENGTH_SHORT).show()
+                    limpiarCampos()
+                    Toast.makeText(this@MainActivity, "Ficha no encontrada", Toast.LENGTH_SHORT).show()
                 }
             }
 
