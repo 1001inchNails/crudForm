@@ -29,3 +29,18 @@ data class Respuesta(
     val message: String,
     val data: JsonObject? = null,
     )
+
+data class RespuestaAll(
+    val type: String,
+    val message: String,
+    val data: List<FichaAll>
+)
+
+data class FichaAll(
+    val _id: String,
+    val nombre: String,
+    val clase: String,
+    val HP: Int,
+    val indice: Int,
+    val __v: Int? = null
+)

@@ -15,4 +15,7 @@ interface ApiService {
 
     @POST("delete")
     fun borrarFicha(@Body data: FichaDelete): Call<Respuesta>
+
+    @GET("readall")
+    fun verTodas(): Call<RespuestaAll>
 }
