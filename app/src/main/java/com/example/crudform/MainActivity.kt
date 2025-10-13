@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     //Toast.makeText(this@MainActivity, "Nueva ficha creada", Toast.LENGTH_LONG).show()
                     val respuesta = response.body()?.data
-                        System.out.println(respuesta)
+                    System.out.println(respuesta)
                     if(respuesta == null){
                         limpiarCampos()
                         Toast.makeText(this@MainActivity, "Ficha no encontrada", Toast.LENGTH_SHORT).show()
