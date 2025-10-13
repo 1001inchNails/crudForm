@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         btnCambiar.setOnClickListener {
             val indice = textNombre.text.toString()
             if (indice.isBlank()) {
-                Toast.makeText(this, "Introduzca Indice para modificar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Introduzca Indice para modificar, y los datos nuevos", Toast.LENGTH_SHORT).show()
             } else {
                 val indice = textIndice.text.toString()
                 val nombre = textNombre.text.toString()
@@ -123,13 +123,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnBorrar.setOnClickListener {
-            val indice = textNombre.text.toString()
+            val indice = textIndice.text.toString()
             if (indice.isBlank()) {
                 Toast.makeText(this, "Introduzca Indice para borrar", Toast.LENGTH_SHORT).show()
             } else {
-                // todo: enviar a backend y borrar entrada con el indice correspondiente
-                // todo: verificar operacion desde back
-                Toast.makeText(this, "Ficha borrada", Toast.LENGTH_SHORT).show()
+                val fichaDelete = FichaDelete(
+                    indice = indice
+                )
+                borrarFicha (fichaDelete)
 
             }
         }
@@ -184,17 +185,33 @@ class MainActivity : AppCompatActivity() {
         RetrofitClient.instance.actualizarFicha(cambiarFicha).enqueue(object : Callback<Respuesta> {
             override fun onResponse(call: Call<Respuesta>, response: Response<Respuesta>) {
                 if (response.isSuccessful) {
-                    //Toast.makeText(this@MainActivity, "Nueva ficha creada", Toast.LENGTH_LONG).show()
-                    val respuesta = response.body()?.data
+
+                    val respuesta = response.body()
                     //System.out.println(respuesta)
-//                    val indiceEncontrado: Int = respuesta.indice;
-//                    val nombreEncontrado: String = respuesta.nombre;
-//                    val claseEncontrada: String = respuesta.clase;
-//                    val hpEncontrado: Int = respuesta.HP;
-//                    textIndice.setText(indiceEncontrado.toString())
-//                    textNombre.setText(nombreEncontrado)
-//                    textClase.setText(claseEncontrada)
-//                    textHP.setText(hpEncontrado.toString())
+                    limpiarCampos()
+
+                    Toast.makeText(this@MainActivity, "Ficha cambiada", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this@MainActivity, "Error al leer ficha", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Respuesta>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
+                System.out.println(t.message);
+            }
+        })
+    }
+
+    private fun borrarFicha(fichaDelete: FichaDelete) {
+        RetrofitClient.instance.borrarFicha(fichaDelete).enqueue(object : Callback<Respuesta> {
+            override fun onResponse(call: Call<Respuesta>, response: Response<Respuesta>) {
+                if (response.isSuccessful) {
+                    val respuesta = response.body()
+                    //System.out.println(respuesta)
+                    limpiarCampos()
+
+                    Toast.makeText(this@MainActivity, "Ficha borrada", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(this@MainActivity, "Error al leer ficha", Toast.LENGTH_SHORT).show()
                 }
