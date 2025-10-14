@@ -1,5 +1,6 @@
 package com.example.crudform
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -66,7 +67,7 @@ class Modificar : AppCompatActivity() {
         val btnVolver = findViewById<Button>(R.id.buttVolver)
 
         btnModificar.setOnClickListener {
-                        val indice = textIndice.text.toString()
+            val indice = textIndice.text.toString()
             if (indice.isBlank()) {
                 Toast.makeText(this, "Elija opcion", Toast.LENGTH_SHORT).show()
             } else {
@@ -75,18 +76,38 @@ class Modificar : AppCompatActivity() {
                 val clase = textClase.text.toString()
                 val hp = textHP.text.toString()
 
-                val fichaUpdate = FichaUpdate(
-                    indice = indice,
-                    nombre = nombre,
-                    clase = clase,
-                    HP = hp
-                )
-                cambiarFicha (fichaUpdate)
+                try {
+                    val hpConv = hp.toInt()
+
+                    if (hpConv <= 0) {
+                        Toast.makeText(this, "El HP debe ser un número positivo mayor que 0",
+                            Toast.LENGTH_SHORT).show()
+                    }
+
+                    if (nombre.isBlank() || clase.isBlank() || hp.isBlank()) {
+                        Toast.makeText(this, "Rellena todos los campos", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        val fichaUpdate = FichaUpdate(
+                            indice = indice,
+                            nombre = nombre,
+                            clase = clase,
+                            HP = hp
+                        )
+                        cambiarFicha(fichaUpdate)
+                    }
+
+
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(this, "Rellena todos los campos (HP debe ser un numero entero positivo)",
+                        Toast.LENGTH_SHORT).show()
+                }
 
             }
         }
 
         btnVolver.setOnClickListener {
+            setResult(Activity.RESULT_OK)
             finish()
         }
     }
@@ -116,30 +137,48 @@ class Modificar : AppCompatActivity() {
                                     opciones.setSelection(0)
                                     cargarDatosEnCampos(listaFichas[0])
 
-                                    Toast.makeText(this@Modificar, "Datos cargados correctamente", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        this@Modificar,
+                                        "Datos cargados correctamente",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 } else {
                                     spinnerAdapter.add("No hay datos disponibles")
-                                    Toast.makeText(this@Modificar, "No hay datos disponibles", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        this@Modificar,
+                                        "No hay datos disponibles",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
+
                             "failure" -> {
                                 spinnerAdapter.clear()
                                 spinnerAdapter.add("No hay datos disponibles")
-                                Toast.makeText(this@Modificar, respuesta.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this@Modificar,
+                                    respuesta.message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
                 } else {
                     spinnerAdapter.clear()
                     spinnerAdapter.add("Error al obtener los datos")
-                    Toast.makeText(this@Modificar, "Error al obtener los datos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Modificar, "Error al obtener los datos", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
 
             override fun onFailure(call: Call<RespuestaAll>, t: Throwable) {
                 spinnerAdapter.clear()
                 spinnerAdapter.add("Error de conexión")
-                Toast.makeText(this@Modificar, "Error de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@Modificar,
+                    "Error de conexión: ${t.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
@@ -159,10 +198,11 @@ class Modificar : AppCompatActivity() {
 
                     val respuesta = response.body()
                     System.out.println(respuesta)
-                    if(respuesta?.type == "failure"){
+                    if (respuesta?.type == "failure") {
                         limpiarCampos()
-                        Toast.makeText(this@Modificar, "Ficha no encontrada", Toast.LENGTH_SHORT).show()
-                    }else{
+                        Toast.makeText(this@Modificar, "Ficha no encontrada", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
                         limpiarCampos()
                         Toast.makeText(this@Modificar, "Ficha cambiada", Toast.LENGTH_LONG).show()
                         verTodos()
@@ -175,7 +215,11 @@ class Modificar : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Respuesta>, t: Throwable) {
-                Toast.makeText(this@Modificar, "Error de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@Modificar,
+                    "Error de conexión: ${t.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
                 System.out.println(t.message);
             }
         })

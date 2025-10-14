@@ -1,5 +1,6 @@
 package com.example.crudform
 
+import android.app.Activity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -39,7 +40,24 @@ class Ver : AppCompatActivity() {
         textClase = findViewById<EditText>(R.id.clase)
         textHP = findViewById<EditText>(R.id.HP)
 
-        spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ArrayList<String>())
+        textIndice.setFocusable(false);
+        textIndice.setFocusableInTouchMode(false);
+        textIndice.setCursorVisible(false);
+
+        textNombre.setFocusable(false);
+        textNombre.setFocusableInTouchMode(false);
+        textNombre.setCursorVisible(false);
+
+        textClase.setFocusable(false);
+        textClase.setFocusableInTouchMode(false);
+        textClase.setCursorVisible(false);
+
+        textHP.setFocusable(false);
+        textHP.setFocusableInTouchMode(false);
+        textHP.setCursorVisible(false);
+
+        spinnerAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, ArrayList<String>())
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         opciones.adapter = spinnerAdapter
 
@@ -67,16 +85,13 @@ class Ver : AppCompatActivity() {
                         textClase.setText(fichaSeleccionada.clase)
                         textHP.setText(fichaSeleccionada.HP.toString())
 
-                        Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Datos cargados correctamente",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
                     } else {
-                        Toast.makeText(this@Ver, "No se encontró el elemento", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@Ver, "No se encontró el elemento", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 } else {
-                    Toast.makeText(this@Ver, "Error al convertir el índice", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Ver, "Error al convertir el índice", Toast.LENGTH_SHORT)
+                        .show()
                 }
             } else {
                 Toast.makeText(this@Ver, "Selección inválida", Toast.LENGTH_SHORT).show()
@@ -84,6 +99,7 @@ class Ver : AppCompatActivity() {
         }
 
         btnVolver.setOnClickListener {
+            setResult(Activity.RESULT_OK)
             finish()
         }
     }
@@ -111,30 +127,32 @@ class Ver : AppCompatActivity() {
                                 }
 
 
-                                Toast.makeText(this@Ver, "Datos cargados correctamente", Toast.LENGTH_SHORT).show()
                             }
+
                             "failure" -> {
                                 spinnerAdapter.clear()
                                 spinnerAdapter.add("No hay datos disponibles")
-                                Toast.makeText(this@Ver, respuesta.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@Ver, respuesta.message, Toast.LENGTH_SHORT)
+                                    .show()
                             }
                         }
                     }
                 } else {
                     spinnerAdapter.clear()
-                    Toast.makeText(this@Ver, "Error al obtener los datos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Ver, "Error al obtener los datos", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
 
             override fun onFailure(call: Call<RespuestaAll>, t: Throwable) {
                 spinnerAdapter.clear()
                 spinnerAdapter.add("Error de conexión")
-                Toast.makeText(this@Ver, "Error de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Ver, "Error de conexión: ${t.message}", Toast.LENGTH_SHORT)
+                    .show()
                 System.out.println(t.message)
             }
         })
     }
-
 
 
     private fun limpiarCampos() {

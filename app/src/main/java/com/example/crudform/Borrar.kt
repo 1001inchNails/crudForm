@@ -1,5 +1,6 @@
 package com.example.crudform
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -38,6 +39,22 @@ class Borrar : AppCompatActivity() {
         textIndice.setCursorVisible(false);
         textClase = findViewById(R.id.clase)
         textHP = findViewById(R.id.HP)
+
+        textIndice.setFocusable(false);
+        textIndice.setFocusableInTouchMode(false);
+        textIndice.setCursorVisible(false);
+
+        textNombre.setFocusable(false);
+        textNombre.setFocusableInTouchMode(false);
+        textNombre.setCursorVisible(false);
+
+        textClase.setFocusable(false);
+        textClase.setFocusableInTouchMode(false);
+        textClase.setCursorVisible(false);
+
+        textHP.setFocusable(false);
+        textHP.setFocusableInTouchMode(false);
+        textHP.setCursorVisible(false);
 
         spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ArrayList())
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -85,6 +102,7 @@ class Borrar : AppCompatActivity() {
         }
 
         btnVolver.setOnClickListener {
+            setResult(Activity.RESULT_OK)
             finish()
         }
     }

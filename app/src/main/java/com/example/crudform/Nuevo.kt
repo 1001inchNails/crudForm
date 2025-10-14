@@ -1,5 +1,6 @@
 package com.example.crudform
 
+import android.app.Activity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -29,6 +30,8 @@ class Nuevo : AppCompatActivity() {
         textClase = findViewById<EditText>(R.id.clase)
         textHP = findViewById<EditText>(R.id.HP)
 
+
+
         val btnNuevo = findViewById<Button>(R.id.buttNuevo)
         val btnVolver = findViewById<Button>(R.id.buttVolver)
 
@@ -37,21 +40,39 @@ class Nuevo : AppCompatActivity() {
             val nombre = textNombre.text.toString()
             val clase = textClase.text.toString()
             val HP = textHP.text.toString()
+            try {
+                val hp = HP.toInt()
 
-            if (nombre.isBlank() || clase.isBlank() || HP.isBlank()) {
-                Toast.makeText(this, "Rellena todos los campos", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                val fichaCreate = FichaCreate(
-                    nombre = nombre,
-                    clase = clase,
-                    HP = HP
-                )
-                crearFicha(fichaCreate)
+                if (hp <= 0) {
+                    Toast.makeText(this, "El HP debe ser un número positivo mayor que 0",
+                        Toast.LENGTH_SHORT).show()
+                }
+
+                if (nombre.isBlank() || clase.isBlank() || HP.isBlank()) {
+                    Toast.makeText(this, "Rellena todos los campos", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    val fichaCreate = FichaCreate(
+                        nombre = nombre,
+                        clase = clase,
+                        HP = HP
+                    )
+                    crearFicha(fichaCreate)
+                }
+
+
+            } catch (e: NumberFormatException) {
+                Toast.makeText(this, "Rellena todos los campos (HP debe ser un numero entero positivo)",
+                    Toast.LENGTH_SHORT).show()
             }
+
+
+
+
         }
 
         btnVolver.setOnClickListener {
+            setResult(Activity.RESULT_OK)
             finish()
         }
     }
@@ -69,7 +90,8 @@ class Nuevo : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Respuesta>, t: Throwable) {
-                Toast.makeText(this@Nuevo, "Error de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Nuevo, "Error de conexión: ${t.message}", Toast.LENGTH_SHORT)
+                    .show()
                 System.out.println(t.message);
             }
         })
