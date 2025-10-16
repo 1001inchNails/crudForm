@@ -19,6 +19,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.lang.ref.WeakReference
 import java.time.format.TextStyle
+import androidx.core.graphics.toColorInt
 
 private lateinit var textOnline: TextView
 private lateinit var textNumFichas: TextView
@@ -105,7 +106,7 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<RespuestaAll>, response: Response<RespuestaAll>) {
                 if (response.isSuccessful) {
                     textOnline.text = "Online"
-                    textOnline.setTextColor(Color.GREEN)
+                    textOnline.setTextColor("#448560".toColorInt())
                     val respuesta = response.body()
 
                     if (respuesta != null) {

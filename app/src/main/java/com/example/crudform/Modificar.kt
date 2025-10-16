@@ -1,6 +1,7 @@
 package com.example.crudform
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -9,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import retrofit2.Call
@@ -40,8 +42,8 @@ class Modificar : AppCompatActivity() {
         textClase = findViewById(R.id.clase)
         textHP = findViewById(R.id.HP)
 
-        spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ArrayList())
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerAdapter = ArrayAdapter(this, R.layout.custom_spinner, ArrayList())
+        spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown)
         opciones.adapter = spinnerAdapter
 
         spinnerAdapter.add("Cargando opciones...")
@@ -79,22 +81,13 @@ class Modificar : AppCompatActivity() {
                 try {
                     val hpConv = hp.toInt()
 
-                    if (hpConv <= 0) {
-                        Toast.makeText(this, "El HP debe ser un número positivo mayor que 0",
-                            Toast.LENGTH_SHORT).show()
-                    }
-
-                    if (nombre.isBlank() || clase.isBlank() || hp.isBlank()) {
-                        Toast.makeText(this, "Rellena todos los campos", Toast.LENGTH_SHORT)
+                    if (nombre.isBlank() || clase.isBlank() || hp.isBlank() || hpConv <= 0) {
+                        Toast.makeText(this, "Rellena todos los campos correctamente", Toast.LENGTH_SHORT)
                             .show()
                     } else {
-                        val fichaUpdate = FichaUpdate(
-                            indice = indice,
-                            nombre = nombre,
-                            clase = clase,
-                            HP = hp
-                        )
-                        cambiarFicha(fichaUpdate)
+
+                        mostrarDialogoConfirmacion(indice, nombre, clase, hp )
+
                     }
 
 
@@ -110,6 +103,34 @@ class Modificar : AppCompatActivity() {
             setResult(Activity.RESULT_OK)
             finish()
         }
+    }
+
+    private fun mostrarDialogoConfirmacion(indice: String, nombre: String, clase: String, hp: String) {
+        val builder = AlertDialog.Builder(this, R.style.custom_dialog)
+        builder.setTitle("Confirmar update")
+        builder.setMessage("¿Estás seguro de modificar esta ficha?")
+
+        builder.setPositiveButton("Update") { dialog, which ->
+            val fichaUpdate = FichaUpdate(
+                indice = indice,
+                nombre = nombre,
+                clase = clase,
+                HP = hp
+            )
+            cambiarFicha(fichaUpdate)
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, which ->
+            dialog.dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+
+            positiveButton.setTextColor(resources.getColor(R.color.warning))
+        }
+        dialog.show()
     }
 
     private fun verTodos() {
@@ -137,11 +158,7 @@ class Modificar : AppCompatActivity() {
                                     opciones.setSelection(0)
                                     cargarDatosEnCampos(listaFichas[0])
 
-                                    Toast.makeText(
-                                        this@Modificar,
-                                        "Datos cargados correctamente",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+
                                 } else {
                                     spinnerAdapter.add("No hay datos disponibles")
                                     Toast.makeText(

@@ -25,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Nuevo"
+                android:fontFamily="sans-serif-black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -34,6 +35,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="sans-serif-black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="Ver" />
@@ -44,6 +46,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="sans-serif-black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="Modificar" />
@@ -54,6 +57,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="sans-serif-black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="Borrar" />
@@ -61,13 +65,16 @@
 
     <LinearLayout
             android:layout_width="409dp"
-            android:layout_height="300dp"
+            android:layout_height="320dp"
             android:layout_marginTop="78dp"
             android:layout_marginBottom="268dp"
             android:background="@color/main_indicators"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:padding="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="5dp"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -78,11 +85,13 @@
 
         <TextView
                 android:id="@+id/labelOnline"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="Estado de backend" />
+                android:text="Estado de backend"
+                android:textSize="24sp"
+                android:fontFamily="sans-serif-black" />
 
         <TextView
                 android:id="@+id/online"
@@ -90,15 +99,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-black"
                 android:text="" />
 
 
         <TextView
                 android:id="@+id/labelMax"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
+                android:fontFamily="sans-serif-black"
+                android:textSize="24sp"
                 android:text="Numero de fichas" />
 
         <TextView
@@ -107,15 +120,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-black"
                 android:text="" />
 
         <Button
                 android:text="Reconectar"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="5dp"
                 android:backgroundTint="@color/main_butt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="126dp"
+                android:layout_height="38dp"
                 android:visibility="invisible"
+                android:textSize="10sp"
+                android:fontFamily="sans-serif-black"
                 android:id="@+id/buttReconectar" />
 
 

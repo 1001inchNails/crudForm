@@ -1,10 +1,12 @@
 package com.example.crudform
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -43,21 +45,12 @@ class Nuevo : AppCompatActivity() {
             try {
                 val hp = HP.toInt()
 
-                if (hp <= 0) {
-                    Toast.makeText(this, "El HP debe ser un número positivo mayor que 0",
-                        Toast.LENGTH_SHORT).show()
-                }
 
-                if (nombre.isBlank() || clase.isBlank() || HP.isBlank()) {
-                    Toast.makeText(this, "Rellena todos los campos", Toast.LENGTH_SHORT)
+                if (nombre.isBlank() || clase.isBlank() || HP.isBlank() || hp <= 0) {
+                    Toast.makeText(this, "Rellena todos los campos correctamente", Toast.LENGTH_SHORT)
                         .show()
                 } else {
-                    val fichaCreate = FichaCreate(
-                        nombre = nombre,
-                        clase = clase,
-                        HP = HP
-                    )
-                    crearFicha(fichaCreate)
+                    mostrarDialogoConfirmacion( nombre, clase, HP )
                 }
 
 
@@ -75,6 +68,33 @@ class Nuevo : AppCompatActivity() {
             setResult(Activity.RESULT_OK)
             finish()
         }
+    }
+
+    private fun mostrarDialogoConfirmacion(nombre: String, clase: String, hp: String) {
+        val builder = AlertDialog.Builder(this, R.style.custom_dialog)
+        builder.setTitle("Confirmar nueva ficha")
+        builder.setMessage("¿Estás seguro de crear esta ficha?")
+
+        builder.setPositiveButton("Crear") { dialog, which ->
+            val fichaCreate = FichaCreate(
+                nombre = nombre,
+                clase = clase,
+                HP = hp
+            )
+            crearFicha(fichaCreate)
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, which ->
+            dialog.dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+
+            positiveButton.setTextColor(resources.getColor(R.color.warning))
+        }
+        dialog.show()
     }
 
     private fun crearFicha(fichaCreate: FichaCreate) {

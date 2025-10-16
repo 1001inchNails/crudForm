@@ -5,4 +5,6 @@
     <color name="main_indicators">#79a88d</color>
     <color name="main_bg">#b7d9bf</color>
     <color name="main_butt">#2e5248</color>
+    <color name="online">#36694c</color>
+    <color name="warning">#eed202 </color>
 </resources>

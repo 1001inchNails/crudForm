@@ -56,9 +56,8 @@ class Ver : AppCompatActivity() {
         textHP.setFocusableInTouchMode(false);
         textHP.setCursorVisible(false);
 
-        spinnerAdapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_item, ArrayList<String>())
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerAdapter = ArrayAdapter(this, R.layout.custom_spinner, ArrayList())
+        spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown)
         opciones.adapter = spinnerAdapter
 
         spinnerAdapter.add("Cargando opciones...")
